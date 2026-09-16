@@ -1,67 +1,51 @@
-# Patch 02 — Radio Engine
+# Patch 03E — Cierre de Fase 3
 
-Esta fase implementa el núcleo matemático puro en TypeScript y sus pruebas automatizadas.
+Aplicar SOBRE la Fase 3D.
 
-No añade UI, mapa, presets 5G normativos ni reglas IMT-2030.
+Corrige:
 
-## 1. Rama
+- tipografía de los popovers renderizados por portal;
+- tipografía de extractos documentales de ETSI/3GPP y MinTIC;
+- presentación de citas regulatorias;
+- añade sustitución numérica debajo de cada fórmula.
 
-```powershell
-git switch main
-git pull origin main
-git switch -c feat/phase02-radio-engine
-```
-
-## 2. Dependencia de pruebas
-
-```powershell
-pnpm add -D vitest
-```
-
-## 3. Aplicar patch
+## Aplicar
 
 ```powershell
 Expand-Archive `
-  -Path "S:\Downloads\jiw-planner-phase02-radio-engine-overlay.zip" `
+  -Path "S:\Downloads\jiw-planner-phase03-final-polish-overlay.zip" `
   -DestinationPath "." `
   -Force
 ```
 
-Ajusta la ruta del ZIP si corresponde.
-
-## 4. Ejecutar pruebas
+## Validar
 
 ```powershell
 pnpm exec vitest run
-```
-
-## 5. Validar Astro
-
-```powershell
 pnpm build
+pnpm dev
 ```
 
-## 6. Validar Git
+## Comprobación manual
+
+1. Abrir varios `?` y verificar tipografía sans-serif uniforme.
+2. Abrir respaldo documental de n78/TDD y revisar extractos.
+3. Activar `Modo sustentación`.
+4. Abrir `Ver desarrollo del cálculo`.
+5. Verificar que cada paso muestre:
+   - fórmula general;
+   - sustitución numérica;
+   - resultado;
+   - explicación.
+6. Cambiar un valor de entrada y recalcular.
+7. Confirmar que la sustitución se actualiza con el nuevo escenario.
+
+## Si todo pasa
 
 ```powershell
 git status
 git diff --check
-git diff --stat
-```
-
-## 7. Commit
-
-```powershell
 git add .
-git commit -m "feat: implement tested radio link budget engine"
-git push -u origin feat/phase02-radio-engine
+git commit -m "feat: finalize phase 3 calculator UX and auditable calculations"
+git push -u origin feat/phase03-calculator-assessment
 ```
-
-## Gate de salida
-
-No pasar a la calculadora React hasta que:
-
-- todos los tests pasen;
-- `pnpm build` pase;
-- no exista lógica RF dentro de componentes UI;
-- las salidas coincidan con los casos matemáticos definidos en Fase 1.
