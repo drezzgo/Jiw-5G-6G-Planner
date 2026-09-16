@@ -3,6 +3,7 @@ import {
   useMemo,
   useState,
   type FormEvent,
+  type ReactNode,
 } from 'react';
 
 import {
@@ -35,6 +36,8 @@ import {
 } from './ContextHelp';
 
 import SourceEvidence from './SourceEvidence';
+
+import TechnicalTerm from '../common/TechnicalTerm';
 
 import './calculator.css';
 
@@ -229,7 +232,7 @@ function ResultCard({
   tone = 'default',
   note,
 }: {
-  label: string;
+  label: ReactNode;
   value: string;
   unit: string;
   tone?: 'default' | 'accent' | 'success' | 'danger';
@@ -293,6 +296,71 @@ function FormulaRow({
       </div>
     </article>
   );
+}
+
+
+function criterionLabelNode(
+  id: string,
+  fallback: string,
+): ReactNode {
+  switch (id) {
+    case 'n78-frequency':
+      return (
+        <>
+          Frecuencia compatible con la banda{' '}
+          <TechnicalTerm termKey="n78">
+            n78
+          </TechnicalTerm>
+        </>
+      );
+
+    case 'n78-duplex':
+      return (
+        <>
+          Duplexación{' '}
+          <TechnicalTerm termKey="tdd">
+            TDD
+          </TechnicalTerm>{' '}
+          para n78
+        </>
+      );
+
+    case 'n78-bandwidth-scs30':
+      return (
+        <>
+          Ancho de banda con{' '}
+          <TechnicalTerm termKey="scs">
+            SCS
+          </TechnicalTerm>{' '}
+          de 30 kHz
+        </>
+      );
+
+    case 'snr-information':
+      return (
+        <>
+          Relación señal/ruido{' '}
+          (
+          <TechnicalTerm termKey="snr">
+            SNR
+          </TechnicalTerm>
+          )
+        </>
+      );
+
+    case 'shannon-information':
+      return (
+        <>
+          Capacidad teórica de{' '}
+          <TechnicalTerm termKey="shannon">
+            Shannon
+          </TechnicalTerm>
+        </>
+      );
+
+    default:
+      return fallback;
+  }
 }
 
 function AssessmentPanel({
@@ -360,7 +428,12 @@ function AssessmentPanel({
               >
                 {statusLabel(blocker.status)}
               </span>
-              <span>{blocker.label}</span>
+              <span>
+                {criterionLabelNode(
+                  blocker.id,
+                  blocker.label,
+                )}
+              </span>
             </div>
           ))}
         </div>
@@ -389,7 +462,12 @@ function AssessmentPanel({
               >
                 <div className="criterion__top">
                   <div>
-                    <strong>{criterion.label}</strong>
+                    <strong>
+                      {criterionLabelNode(
+                        criterion.id,
+                        criterion.label,
+                      )}
+                    </strong>
                     <div className="criterion__meta">
                       {criterion.severity}
                       {' · '}
@@ -606,7 +684,7 @@ export default function RadioCalculator() {
 
   return (
     <div className="radio-calculator">
-      <section className="calculator-toolbar">
+      <section className="calculator-toolbar" id="escenario">
         <div className="field field--scenario">
           <label htmlFor="preset">
             Caso de referencia
@@ -696,31 +774,31 @@ export default function RadioCalculator() {
 
         <div className="technology-profile">
           <span>
-            <LabelWithHelp
-              label={<>Banda <strong>n78</strong></>}
-              helpKey="bandN78"
-            />
+            Banda{' '}
+            <TechnicalTerm termKey="n78">
+              n78
+            </TechnicalTerm>
           </span>
 
           <span>
-            <LabelWithHelp
-              label={<>SCS <strong>30 kHz</strong></>}
-              helpKey="scs"
-            />
+            <TechnicalTerm termKey="scs">
+              SCS
+            </TechnicalTerm>{' '}
+            <strong>30 kHz</strong>
           </span>
 
           <span>
-            <LabelWithHelp
-              label={<>Duplexación <strong>TDD</strong></>}
-              helpKey="tdd"
-            />
+            Duplexación{' '}
+            <TechnicalTerm termKey="tdd">
+              TDD
+            </TechnicalTerm>
           </span>
 
           <span>
-            <LabelWithHelp
-              label={<>Arquitectura <strong>SA</strong></>}
-              helpKey="sa"
-            />
+            Arquitectura{' '}
+            <TechnicalTerm termKey="sa">
+              SA
+            </TechnicalTerm>
           </span>
         </div>
       </section>
@@ -740,6 +818,7 @@ export default function RadioCalculator() {
 
       <form
         className="calculator-grid"
+        id="calculo"
         onSubmit={submit}
       >
         <section className="input-panel">
@@ -982,7 +1061,11 @@ export default function RadioCalculator() {
           <div className="secondary-results">
             <span>
               <small>
-                Pérdida en espacio libre (FSPL)
+                Pérdida en espacio libre (
+                <TechnicalTerm termKey="fspl">
+                  FSPL
+                </TechnicalTerm>
+                )
               </small>
               <strong>
                 {format(result.pathLossDb)} dB
@@ -991,7 +1074,9 @@ export default function RadioCalculator() {
 
             <span>
               <small>
-                PIRE (EIRP)
+                <TechnicalTerm termKey="pire">
+                  PIRE (EIRP)
+                </TechnicalTerm>
               </small>
               <strong>
                 {format(result.eirpDbm)} dBm
@@ -1082,7 +1167,7 @@ export default function RadioCalculator() {
         </section>
       </form>
 
-      <section className="assessment-section">
+      <section className="assessment-section" id="evaluacion">
         <header className="section-heading">
           <div>
             <span className="eyebrow">
@@ -1125,7 +1210,7 @@ export default function RadioCalculator() {
         </div>
       </section>
 
-      <section className="interpretation-note">
+      <section className="interpretation-note" id="conclusion">
         <strong>Cómo interpretar el resultado</strong>
         <p>
           Que un perfil “pase” significa que satisface las

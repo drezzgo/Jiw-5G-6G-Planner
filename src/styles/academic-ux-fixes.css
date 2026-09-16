@@ -1,0 +1,167 @@
+/*
+ * Ajustes de estabilidad visual compartidos.
+ *
+ * Estos estilos no cambian la lógica del proyecto. Su objetivo es que
+ * los mismos componentes conserven alineación y jerarquía tanto en la
+ * vista normal como en Modo exposición.
+ */
+
+/* Perfil rápido del planner: centra correctamente texto, valor y ayudas. */
+.planner-profile {
+  align-items: center;
+}
+
+.planner-profile > span {
+  display: inline-flex !important;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  line-height: 1.15;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.planner-profile > span > strong,
+.planner-profile .planner-term,
+.planner-profile .planner-term > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Los controles deben ocupar la misma altura dentro de la rejilla. */
+.phase6-controls {
+  align-items: stretch !important;
+}
+
+.phase6-control-block {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.phase6-control-block > label {
+  min-height: 20px;
+}
+
+.phase6-control-block > select {
+  margin-top: auto;
+}
+
+.phase6-explanation {
+  min-width: 0;
+  justify-content: center;
+}
+
+/* Evita que valores como Frecuencia/Ancho parezcan pegados al borde. */
+.antenna-readout,
+.geometry-hero > div,
+.map-radio-metrics > span,
+.propagation-main-value,
+.coverage-summary > span,
+.terrain-result {
+  align-content: center;
+}
+
+/* Unidades de la calculadora centradas verticalmente. */
+.input-unit {
+  min-height: 44px;
+}
+
+.input-unit > span {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.secondary-results > span {
+  display: grid;
+  align-content: center;
+  min-height: 62px;
+}
+
+/* En evaluación, las explicaciones largas conservan una lectura cómoda. */
+.criterion > p,
+.remediation,
+.terrain-interpretation p {
+  max-width: 78ch;
+  line-height: 1.55 !important;
+}
+
+/*
+ * Modo exposición:
+ * compactamos sin eliminar piezas internas que mantienen la geometría
+ * del layout. Esto evita saltos, cajas vacías y controles descentrados.
+ */
+.presentation-mode .planner-profile > span {
+  min-height: 30px;
+  padding-block: 0.28rem;
+}
+
+.presentation-mode .phase6-controls {
+  align-items: stretch !important;
+  gap: 0.5rem;
+}
+
+.presentation-mode .phase6-control-block,
+.presentation-mode .phase6-explanation {
+  min-height: 58px;
+}
+
+.presentation-mode .phase6-explanation span {
+  display: -webkit-box !important;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+.presentation-mode .antenna-standard-note p,
+.presentation-mode .coverage-note,
+.presentation-mode .fixed-parameters-note,
+.presentation-mode .terrain-warning,
+.presentation-mode .terrain-data-note {
+  display: block !important;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.presentation-mode .antenna-standard-note p,
+.presentation-mode .coverage-note,
+.presentation-mode .terrain-warning p,
+.presentation-mode .terrain-data-note {
+  display: -webkit-box !important;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.presentation-mode .fixed-parameters-note {
+  padding: 0.5rem;
+}
+
+.presentation-mode .geometry-hero > div,
+.presentation-mode .map-radio-metrics > span,
+.presentation-mode .coverage-summary > span {
+  min-height: 54px;
+}
+
+.presentation-mode .criterion > p {
+  line-height: 1.45 !important;
+}
+
+@media (max-width: 1180px) {
+  .planner-profile {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .planner-profile > span {
+    flex: 1 1 auto;
+  }
+}

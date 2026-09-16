@@ -1,30 +1,813 @@
-﻿---
-const title = 'JIW 5G/6G Planner Colombia';
+---
+import PresentationBar from '../components/PresentationBar.astro';
+import NavigationEnhancer from '../components/NavigationEnhancer.astro';
+import { fade } from 'astro:transitions';
+import '../styles/academic-ux-fixes.css';
+import '../styles/jiw-colombia-theme.css';
+
+const presentationAnchors = [
+  {href: '#objetivo', label: 'Objetivo'},
+  {href: '#modulos', label: 'Herramientas'},
+  {href: '#ruta', label: 'Flujo de trabajo'},
+  {href: '#capacidades', label: 'Capacidades'},
+];
+
+const capabilities = [
+  {
+    phase: '03',
+    title: 'Presupuesto de enlace',
+    description:
+      'FSPL, PIRE, potencia recibida, ruido, SNR, margen y capacidad teórica.',
+  },
+  {
+    phase: '04',
+    title: 'Ubicación geográfica',
+    description:
+      'gNB y UE sobre mapa, distancia y rumbo calculados desde coordenadas.',
+  },
+  {
+    phase: '05',
+    title: 'Propagación 3GPP',
+    description:
+      'Espacio libre, UMi, UMa e InH con escenarios LOS y NLOS.',
+  },
+  {
+    phase: '06',
+    title: 'Antenas y cobertura',
+    description:
+      'Orientación, ganancia efectiva y cuadrícula académica de cobertura.',
+  },
+  {
+    phase: '07',
+    title: 'Terreno y Fresnel',
+    description:
+      'Perfil de elevación, obstrucción del relieve y primera zona de Fresnel.',
+  },
+  {
+    phase: '08',
+    title: 'IMT-2030 experimental',
+    description:
+      'Contraste de referencias de investigación con lo que el modelo puede calcular sin presentar 6G como una norma final.',
+  },
+];
+
+
+const pageTransition = fade({ duration: '140ms' });
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="viewport"
+      content="width=device-width"
+    />
     <meta
       name="description"
-      content="Herramienta académica de planificación radioeléctrica 5G NR e IMT-2030."
+      content="JIW 5G/6G Planner Colombia: herramienta académica de simulación radioeléctrica, planificación y evaluación técnica para escenarios 5G NR e IMT-2030."
     />
-    <title>{title}</title>
+    <title>
+      JIW 5G/6G Planner Colombia
+    </title>
+    <NavigationEnhancer />
   </head>
 
   <body>
-    <main>
-      <h1>{title}</h1>
+    <main
+      class="home-shell"
+      transition:name="jiw-page"
+      transition:animate={pageTransition}
+    >
+      <PresentationBar
+        current="home"
+        anchors={presentationAnchors}
+      />
 
-      <p>
-        Sistema web académico para simulación radioeléctrica,
-        evaluación técnica y recomendación de escenarios 5G NR
-        e IMT-2030.
-      </p>
+      <header class="hero" id="objetivo">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            Teoría de la Información · Ingeniería Telemática
+          </p>
 
-      <p>Proyecto en desarrollo — Fase 1.</p>
+          <div
+            class="colombia-mark"
+            aria-label="Proyecto desarrollado para contexto colombiano"
+          >
+            <span class="colombia-mark__yellow"></span>
+            <span class="colombia-mark__blue"></span>
+            <span class="colombia-mark__red"></span>
+          </div>
+
+          <h1>
+            JIW 5G/6G Planner Colombia
+          </h1>
+
+          <p class="hero-lead">
+            En este proyecto integramos cálculo radioeléctrico,
+            planificación sobre mapa y consulta de fuentes
+            técnicas para estudiar escenarios 5G NR y
+            experimentales IMT-2030 en el contexto colombiano.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="button button--primary"
+              href="/planner"
+            >
+              Abrir planificador geográfico
+            </a>
+
+            <a
+              class="button button--secondary"
+              href="/calculadora"
+            >
+              Abrir calculadora RF
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="hero-diagram"
+          aria-label="Flujo conceptual de JIW Planner"
+        >
+          <span>Escenario</span>
+          <i>↓</i>
+          <span>Simulación RF</span>
+          <i>↓</i>
+          <span>Evaluación</span>
+          <i>↓</i>
+          <span>Recomendación</span>
+        </div>
+      </header>
+
+      <section class="module-section" id="modulos">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">
+              ¿Por dónde empezar?
+            </p>
+            <h2>
+              Dos formas de trabajar con el mismo motor
+            </h2>
+          </div>
+
+          <p>
+            Separamos el proyecto en dos herramientas para
+            poder revisar primero los cálculos y después
+            llevar esos mismos parámetros al mapa.
+          </p>
+        </div>
+
+        <div class="module-grid">
+          <article class="module-card">
+            <span class="module-number">
+              01
+            </span>
+
+            <h3>
+              Calculadora de enlace radio
+            </h3>
+
+            <p>
+              La usamos para revisar cada variable del
+              enlace y comprobar paso a paso cómo obtenemos
+              los resultados.
+            </p>
+
+            <ul>
+              <li>
+                configuración manual del enlace;
+              </li>
+              <li>
+                fórmulas con sustitución numérica;
+              </li>
+              <li>
+                evaluación 5G NR e IMT-2030;
+              </li>
+              <li>
+                fuentes técnicas indexadas.
+              </li>
+            </ul>
+
+            <a href="/calculadora">
+              Ir a la calculadora →
+            </a>
+          </article>
+
+          <article class="module-card module-card--accent">
+            <span class="module-number">
+              02
+            </span>
+
+            <h3>
+              Planificador geográfico
+            </h3>
+
+            <p>
+              La usamos para llevar el mismo escenario al
+              mapa y revisar cómo cambian los resultados con
+              la distancia, el entorno, la antena y el
+              relieve.
+            </p>
+
+            <ul>
+              <li>
+                gNB y UE sobre mapa;
+              </li>
+              <li>
+                UMi, UMa, InH y LOS/NLOS;
+              </li>
+              <li>
+                antena direccional y cobertura;
+              </li>
+              <li>
+                terreno y zona de Fresnel.
+              </li>
+            </ul>
+
+            <a href="/planner">
+              Ir al planificador →
+            </a>
+          </article>
+
+          <article class="module-card">
+            <span class="module-number">
+              03
+            </span>
+
+            <h3>
+              IMT-2030 experimental
+            </h3>
+
+            <p>
+              Lo usamos para separar las referencias que ya
+              publica la UIT de las conclusiones que todavía
+              no podemos obtener con nuestro modelo.
+            </p>
+
+            <ul>
+              <li>
+                capacidad teórica de Shannon;
+              </li>
+              <li>
+                referencias de M.2160;
+              </li>
+              <li>
+                capacidades no evaluables;
+              </li>
+              <li>
+                estado actual de ITU y 3GPP.
+              </li>
+            </ul>
+
+            <a href="/imt2030">
+              Abrir modo experimental →
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section class="workflow-section" id="ruta">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">
+              Flujo de trabajo
+            </p>
+            <h2>
+              Cómo usamos la herramienta
+            </h2>
+          </div>
+
+          <p>
+            Construimos la web para poder pasar de la
+            configuración del enlace a la simulación y al
+            contraste técnico sin tener que cambiar de
+            herramientas.
+          </p>
+        </div>
+
+        <div class="workflow">
+          <article>
+            <strong>1</strong>
+            <span>Configuramos</span>
+            <p>
+              Definimos frecuencia, ancho de banda,
+              potencia, receptor y demás parámetros del
+              escenario.
+            </p>
+          </article>
+
+          <article>
+            <strong>2</strong>
+            <span>Ubicamos</span>
+            <p>
+              Situamos la gNB y el UE para obtener distancia,
+              rumbo y geometría del enlace.
+            </p>
+          </article>
+
+          <article>
+            <strong>3</strong>
+            <span>Modelamos</span>
+            <p>
+              Seleccionamos propagación, condición LOS/NLOS
+              y configuración de antena.
+            </p>
+          </article>
+
+          <article>
+            <strong>4</strong>
+            <span>Comprobamos</span>
+            <p>
+              Revisamos potencia recibida, SNR, margen,
+              cobertura, terreno y Fresnel.
+            </p>
+          </article>
+
+          <article>
+            <strong>5</strong>
+            <span>Contrastamos</span>
+            <p>
+              Comparamos los resultados con las fuentes
+              técnicas y regulatorias que usamos en el
+              proyecto.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="capability-section" id="capacidades">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">
+              Estado del proyecto
+            </p>
+            <h2>
+              Capacidades integradas
+            </h2>
+          </div>
+
+          <p>
+            Todo parte del mismo núcleo de cálculo, así que
+            la calculadora y el planificador no generan
+            resultados con lógicas diferentes.
+          </p>
+        </div>
+
+        <div class="capability-grid">
+          {capabilities.map((item) => (
+            <article>
+              <span>
+                Fase {item.phase}
+              </span>
+              <h3>
+                {item.title}
+              </h3>
+              <p>
+                {item.description}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="scope-note">
+        <strong>
+          Alcance académico
+        </strong>
+        <p>
+          Nuestro alcance es académico. Los resultados
+          dependen de los modelos, parámetros y fuentes que
+          documentamos en la aplicación y no reemplazan una
+          planificación RF profesional ni una autorización
+          para usar el espectro.
+        </p>
+      </section>
     </main>
   </body>
 </html>
+
+<style>
+  :global(:root) {
+    background: var(--jiw-canvas);
+    color: var(--jiw-ink);
+  }
+
+  :global(body) {
+    margin: 0;
+    font-family: var(--jiw-font);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .home-shell {
+    width: min(1280px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 1.4rem 0 3rem;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1.25fr)
+      minmax(300px, 0.75fr);
+    gap: 2rem;
+    align-items: center;
+    min-height: 410px;
+    border: 1px solid var(--jiw-border);
+    border-radius: var(--jiw-radius-card);
+    background: var(--jiw-surface-raised);
+    box-shadow: var(--jiw-shadow-card);
+    padding: clamp(1.5rem, 4vw, 3.2rem);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.55rem;
+    color: var(--jiw-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .colombia-mark {
+    display: flex;
+    gap: 5px;
+    width: fit-content;
+    margin: 0 0 0.85rem;
+  }
+
+  .colombia-mark span {
+    display: block;
+    width: 24px;
+    height: 4px;
+    border-radius: 999px;
+  }
+
+  .colombia-mark__yellow {
+    background: var(--jiw-yellow);
+  }
+
+  .colombia-mark__blue {
+    background: var(--jiw-blue);
+  }
+
+  .colombia-mark__red {
+    background: var(--jiw-red);
+  }
+
+  .hero h1 {
+    max-width: 820px;
+    margin: 0;
+    color: var(--jiw-ink);
+    font-size: clamp(2.7rem, 6.3vw, 4.8rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-lead {
+    max-width: 760px;
+    margin: 1.15rem 0 0;
+    color: var(--jiw-muted);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .button {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--jiw-radius-control);
+    padding: 0.55rem 0.9rem;
+    font-size: 0.86rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .button--primary {
+    border: 1px solid var(--jiw-primary);
+    background: var(--jiw-primary);
+    color: #fafafa;
+  }
+
+  .button--primary:hover {
+    background: var(--jiw-primary-hover);
+  }
+
+  .button--secondary {
+    border: 1px solid var(--jiw-border);
+    background: var(--jiw-surface-soft);
+    color: var(--jiw-ink);
+  }
+
+  .button--secondary:hover {
+    border-color: var(--jiw-border-strong);
+    background: var(--jiw-surface);
+  }
+
+  .hero-diagram {
+    display: grid;
+    gap: 0.45rem;
+    align-content: center;
+  }
+
+  .hero-diagram span {
+    border: 1px solid var(--jiw-border);
+    border-radius: var(--jiw-radius-control);
+    background: var(--jiw-surface-soft);
+    padding: 0.72rem 0.9rem;
+    color: var(--jiw-ink-soft);
+    font-size: 0.86rem;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .hero-diagram i {
+    color: var(--jiw-muted);
+    font-style: normal;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .module-section,
+  .workflow-section,
+  .capability-section {
+    margin-top: 1.4rem;
+    border: 1px solid var(--jiw-border);
+    border-radius: var(--jiw-radius-card);
+    background: var(--jiw-surface-raised);
+    box-shadow: var(--jiw-shadow-card);
+    padding: 1.25rem;
+  }
+
+  .section-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.4rem;
+    align-items: flex-start;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    color: var(--jiw-ink);
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  .section-heading > p {
+    max-width: 500px;
+    margin: 0;
+    color: var(--jiw-muted);
+    font-size: 0.86rem;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .module-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--jiw-border);
+    border-radius: var(--jiw-radius-card);
+    background: var(--jiw-surface-raised);
+    box-shadow: var(--jiw-shadow-card);
+    padding: 1.15rem;
+  }
+
+  .module-card--accent {
+    border-color: var(--jiw-border);
+    background: var(--jiw-surface-raised);
+  }
+
+  .module-number {
+    display: inline-flex;
+    border-radius: var(--jiw-radius-control);
+    background: var(--jiw-primary);
+    color: #fafafa;
+    padding: 0.22rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+
+  .module-card:nth-child(1) .module-number {
+    box-shadow: inset 0 -3px 0 var(--jiw-yellow);
+  }
+
+  .module-card:nth-child(2) .module-number {
+    box-shadow: inset 0 -3px 0 var(--jiw-blue);
+  }
+
+  .module-card:nth-child(3) .module-number {
+    box-shadow: inset 0 -3px 0 var(--jiw-red);
+  }
+
+  .module-card h3 {
+    margin: 0.75rem 0 0.35rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .module-card p,
+  .module-card li {
+    color: var(--jiw-muted);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  .module-card ul {
+    margin: 0.7rem 0;
+    padding-left: 1.1rem;
+  }
+
+  .module-card a {
+    color: var(--jiw-blue);
+    font-size: 0.86rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .module-card a:hover {
+    text-decoration: underline;
+  }
+
+  .workflow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-top: 1rem;
+  }
+
+  .workflow article,
+  .capability-grid article {
+    border: 1px solid var(--jiw-border);
+    border-radius: var(--jiw-radius-small);
+    background: var(--jiw-surface);
+    padding: 0.9rem;
+  }
+
+  .workflow strong {
+    display: inline-flex;
+    min-width: 30px;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--jiw-radius-control);
+    background: var(--jiw-primary);
+    color: #fafafa;
+    font-size: 0.76rem;
+    font-weight: 500;
+  }
+
+  .workflow span {
+    display: block;
+    margin-top: 0.55rem;
+    color: var(--jiw-ink);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .workflow p,
+  .capability-grid p {
+    margin: 0.3rem 0 0;
+    color: var(--jiw-muted);
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-top: 1rem;
+  }
+
+  .capability-grid span {
+    color: var(--jiw-muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .capability-grid h3 {
+    margin: 0.42rem 0 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .scope-note {
+    margin-top: 1.4rem;
+    border: 1px solid var(--jiw-border);
+    border-left: 4px solid var(--jiw-blue);
+    border-radius: var(--jiw-radius-small);
+    background: var(--jiw-surface-raised);
+    box-shadow: var(--jiw-shadow-card);
+    padding: 0.9rem 1rem;
+  }
+
+  .scope-note p {
+    margin: 0.3rem 0 0;
+    color: var(--jiw-muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  :global(.presentation-mode) .hero {
+    min-height: 330px;
+    padding: 1.35rem;
+  }
+
+  :global(.presentation-mode) .hero h1 {
+    font-size: clamp(2.1rem, 5vw, 3.7rem);
+  }
+
+  :global(.presentation-mode) .hero-lead {
+    margin-top: 0.7rem;
+    font-size: 0.92rem;
+  }
+
+  :global(.presentation-mode) .hero-diagram {
+    gap: 0.3rem;
+  }
+
+  :global(.presentation-mode) .hero-diagram span {
+    padding: 0.55rem 0.75rem;
+  }
+
+  :global(.presentation-mode) .module-section,
+  :global(.presentation-mode) .workflow-section,
+  :global(.presentation-mode) .capability-section {
+    margin-top: 0.75rem;
+    padding: 0.85rem;
+  }
+
+  :global(.presentation-mode) .module-card {
+    padding: 0.8rem;
+  }
+
+  :global(.presentation-mode) .capability-grid {
+    gap: 0.4rem;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .module-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+
+    .workflow,
+    .capability-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+
+    .section-heading {
+      flex-direction: column;
+    }
+
+    .section-heading > p {
+      max-width: none;
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .workflow,
+    .capability-grid,
+    .module-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+      font-size: 2.65rem;
+    }
+
+    .hero-actions {
+      display: grid;
+    }
+  }
+</style>

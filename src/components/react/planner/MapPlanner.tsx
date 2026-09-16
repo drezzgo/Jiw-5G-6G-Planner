@@ -60,6 +60,8 @@ import {
   PlannerTerm,
 } from './PlannerHelp';
 
+import TerrainPanel from './TerrainPanel';
+
 type PlacementMode =
   | 'TX'
   | 'RX'
@@ -282,13 +284,13 @@ function assessmentLabel(
 ): string {
   switch (status) {
     case 'PASS':
-      return 'Pasa las reglas evaluadas';
+      return 'La configuración cumple los criterios evaluados';
     case 'PASS_WITH_WARNINGS':
-      return 'Pasa con advertencias';
+      return 'La configuración cumple, pero hay puntos por revisar';
     case 'FAIL':
-      return 'No pasa las reglas evaluadas';
+      return 'Hay criterios técnicos que no se cumplen';
     default:
-      return 'No evaluable completamente';
+      return 'Con estos datos todavía no podemos concluir';
   }
 }
 
@@ -1135,7 +1137,7 @@ export default function MapPlanner() {
 
   return (
     <div className="map-planner">
-      <section className="planner-intro">
+      <section className="planner-intro" id="resumen">
         <div>
           <span className="planner-eyebrow">
             Fase 6 · Antenas y cobertura
@@ -1183,7 +1185,7 @@ export default function MapPlanner() {
         </div>
       </section>
 
-      <section className="phase6-controls">
+      <section className="phase6-controls" id="modelo">
         <div className="phase6-control-block">
           <label htmlFor="propagation-model">
             <PlannerTerm helpKey="propagation">
@@ -1359,7 +1361,7 @@ export default function MapPlanner() {
         </div>
       </details>
 
-      <section className="antenna-panel">
+      <section className="antenna-panel" id="antena">
         <header>
           <div>
             <span className="planner-eyebrow">
@@ -1515,7 +1517,7 @@ export default function MapPlanner() {
           )}
       </section>
 
-      <section className="planner-layout">
+      <section className="planner-layout" id="mapa">
         <div className="map-panel">
           <div className="map-toolbar">
             <div className="placement-buttons">
@@ -1636,7 +1638,7 @@ export default function MapPlanner() {
         </div>
 
         <aside className="link-sidebar">
-          <section className="coverage-card">
+          <section className="coverage-card" id="cobertura">
             <header>
               <span className="planner-eyebrow">
                 <PlannerTerm helpKey="coverage">
@@ -2019,8 +2021,8 @@ export default function MapPlanner() {
                 {!radioResult
                   ? 'No evaluable con el modelo seleccionado'
                   : marginPass
-                    ? 'Enlace viable según sensibilidad'
-                    : 'Enlace no viable según sensibilidad'}
+                    ? 'La potencia recibida supera la sensibilidad configurada'
+                    : 'La potencia recibida no alcanza la sensibilidad configurada'}
               </h3>
             </header>
 
@@ -2130,6 +2132,21 @@ export default function MapPlanner() {
           </section>
         </aside>
       </section>
+
+      <TerrainPanel
+        tx={tx}
+        rx={rx}
+        distanceM={distanceM}
+        frequencyHz={
+          scenario.radio.frequencyHz
+        }
+        bsHeightM={
+          heights.bsHeightM
+        }
+        utHeightM={
+          heights.utHeightM
+        }
+      />
 
       <section className="map-method-note">
         <strong>

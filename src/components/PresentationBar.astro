@@ -1,0 +1,518 @@
+---
+interface AnchorItem {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  current: 'home' | 'calculator' | 'planner' | 'imt2030';
+  anchors?: AnchorItem[];
+}
+
+const {
+  current,
+  anchors = [],
+} = Astro.props;
+
+const routes = [
+  {
+    id: 'home',
+    href: '/',
+    label: 'Inicio',
+  },
+  {
+    id: 'calculator',
+    href: '/calculadora',
+    label: 'Calculadora',
+  },
+  {
+    id: 'planner',
+    href: '/planner',
+    label: 'Planificador',
+  },
+  {
+    id: 'imt2030',
+    href: '/imt2030',
+    label: 'IMT-2030',
+  },
+];
+---
+
+<div
+  class="presentation-bar"
+  data-presentation-bar
+>
+  <div class="presentation-bar__routes">
+    <span
+      class="presentation-brand"
+      aria-label="JIW Colombia"
+    >
+      <strong>JIW</strong>
+      <span
+        class="presentation-brand__flag"
+        aria-hidden="true"
+      >
+        <i class="presentation-brand__yellow"></i>
+        <i class="presentation-brand__blue"></i>
+        <i class="presentation-brand__red"></i>
+      </span>
+    </span>
+
+    {routes.map((route) => (
+      <a
+        href={route.href}
+        data-astro-prefetch="load"
+        class:list={[
+          'presentation-route',
+          {
+            'presentation-route--active':
+              route.id === current,
+          },
+        ]}
+      >
+        {route.label}
+      </a>
+    ))}
+  </div>
+
+  {anchors.length > 0 && (
+    <nav
+      class="presentation-bar__anchors"
+      aria-label="Secciones de esta página"
+    >
+      {anchors.map((anchor) => (
+        <a href={anchor.href}>
+          {anchor.label}
+        </a>
+      ))}
+    </nav>
+  )}
+
+  <button
+    type="button"
+    class="presentation-mode-toggle"
+    data-presentation-toggle
+    aria-pressed="false"
+  >
+    Modo exposición
+  </button>
+</div>
+
+<script>
+  const STORAGE_KEY = 'jiw-presentation-mode';
+
+  function presentationEnabled() {
+    return sessionStorage.getItem(
+      STORAGE_KEY,
+    ) === '1';
+  }
+
+  function syncPresentationClass() {
+    document.body.classList.toggle(
+      'presentation-mode',
+      presentationEnabled(),
+    );
+  }
+
+  function setupPresentationBar() {
+    const body = document.body;
+    const button = document.querySelector(
+      '[data-presentation-toggle]',
+    );
+
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    function applyPresentationMode(
+      enabled,
+    ) {
+      body.classList.toggle(
+        'presentation-mode',
+        enabled,
+      );
+
+      button.setAttribute(
+        'aria-pressed',
+        String(enabled),
+      );
+
+      button.textContent = enabled
+        ? 'Salir de exposición'
+        : 'Modo exposición';
+    }
+
+    applyPresentationMode(
+      presentationEnabled(),
+    );
+
+    if (
+      button.dataset.presentationBound
+      === '1'
+    ) {
+      return;
+    }
+
+    button.dataset.presentationBound = '1';
+
+    button.addEventListener(
+      'click',
+      () => {
+        const enabled =
+          !body.classList.contains(
+            'presentation-mode',
+          );
+
+        if (enabled) {
+          sessionStorage.setItem(
+            STORAGE_KEY,
+            '1',
+          );
+        } else {
+          sessionStorage.removeItem(
+            STORAGE_KEY,
+          );
+        }
+
+        applyPresentationMode(enabled);
+      },
+    );
+  }
+
+  document.addEventListener(
+    'astro:page-load',
+    setupPresentationBar,
+  );
+
+  document.addEventListener(
+    'astro:after-swap',
+    syncPresentationClass,
+  );
+
+  setupPresentationBar();
+</script>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  [id] {
+    scroll-margin-top: 82px;
+  }
+
+  .presentation-bar {
+    position: sticky;
+    z-index: 80;
+    top: 10px;
+    display: grid;
+    grid-template-columns: minmax(0, auto) 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    border: 1px solid var(--jiw-border);
+    border-radius: var(--jiw-radius-card);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--jiw-shadow-card);
+    padding: 0.38rem 0.45rem;
+    font-family: var(--jiw-font);
+    backdrop-filter: blur(12px);
+  }
+
+  .presentation-bar__routes,
+  .presentation-bar__anchors {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .presentation-bar__routes {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .presentation-bar__routes::-webkit-scrollbar {
+    display: none;
+  }
+
+  .presentation-brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.42rem;
+    margin-right: 0.2rem;
+    padding-inline: 0.45rem 0.2rem;
+    color: var(--jiw-ink);
+    font-size: 0.78rem;
+    letter-spacing: -0.02em;
+  }
+
+  .presentation-brand strong {
+    font-weight: 600;
+  }
+
+  .presentation-brand__flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .presentation-brand__flag i {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .presentation-brand__yellow {
+    background: var(--jiw-yellow);
+  }
+
+  .presentation-brand__blue {
+    background: var(--jiw-blue);
+  }
+
+  .presentation-brand__red {
+    background: var(--jiw-red);
+  }
+
+  .presentation-bar__anchors {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .presentation-bar__anchors::-webkit-scrollbar {
+    display: none;
+  }
+
+  .presentation-route,
+  .presentation-bar__anchors a,
+  .presentation-mode-toggle {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: var(--jiw-radius-control);
+    background: transparent;
+    color: var(--jiw-muted);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.5rem 0.7rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .presentation-route:hover,
+  .presentation-bar__anchors a:hover {
+    background: var(--jiw-surface-soft);
+    color: var(--jiw-ink);
+  }
+
+  .presentation-route--active {
+    background: var(--jiw-primary);
+    color: #fafafa;
+  }
+
+  .presentation-route--active::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    margin-left: 0.4rem;
+    border-radius: 50%;
+    background: var(--jiw-blue);
+    box-shadow:
+      8px 0 0 var(--jiw-yellow),
+      16px 0 0 var(--jiw-red);
+  }
+
+  .presentation-route--active {
+    padding-right: 1.9rem;
+  }
+
+  .presentation-bar__anchors a {
+    position: relative;
+  }
+
+  .presentation-bar__anchors a + a::before {
+    content: "";
+    position: absolute;
+    left: -0.13rem;
+    width: 1px;
+    height: 14px;
+    background: var(--jiw-border);
+  }
+
+  .presentation-mode-toggle {
+    border: 1px solid var(--jiw-border);
+    background: var(--jiw-surface-soft);
+    color: var(--jiw-ink);
+    cursor: pointer;
+  }
+
+  .presentation-mode-toggle:hover {
+    border-color: var(--jiw-border-strong);
+    background: var(--jiw-surface);
+  }
+
+  .presentation-mode .presentation-mode-toggle {
+    border-color: var(--jiw-primary);
+    background: var(--jiw-primary);
+    color: #fafafa;
+  }
+
+  /* Modo exposición: prioriza demostración, no documentación extensa. */
+  .presentation-mode .page-shell,
+  .presentation-mode .home-shell {
+    width: min(1480px, calc(100% - 1rem));
+    padding-top: 0.45rem;
+  }
+
+  .presentation-mode .page-header {
+    margin-bottom: 0.55rem;
+  }
+
+  .presentation-mode .page-header .kicker {
+    margin-top: 0.45rem;
+  }
+
+  .presentation-mode .page-header h1 {
+    margin: 0.1rem 0 0.2rem;
+    font-size: clamp(1.45rem, 3.1vw, 2.15rem);
+  }
+
+  .presentation-mode .page-header > p:not(.kicker),
+  .presentation-mode .page-footer {
+    display: none;
+  }
+
+  .presentation-mode .planner-intro {
+    margin-bottom: 0.5rem;
+  }
+
+  .presentation-mode .planner-intro h2 {
+    margin-bottom: 0.15rem;
+    font-size: 1.08rem;
+  }
+
+  .presentation-mode .planner-intro p,
+  .presentation-mode .map-method-note {
+    display: none;
+  }
+
+  .presentation-mode .phase6-controls,
+  .presentation-mode .antenna-panel {
+    margin-bottom: 0.5rem;
+    padding: 0.55rem;
+  }
+
+  .presentation-mode .antenna-controls-grid {
+    margin-top: 0.45rem;
+  }
+
+  .presentation-mode .antenna-standard-note {
+    margin-top: 0.42rem;
+    padding-top: 0.42rem;
+  }
+
+  .presentation-mode .map-container {
+    height: min(50vh, 500px);
+    min-height: 360px;
+  }
+
+  .presentation-mode .map-toolbar {
+    padding: 0.42rem;
+  }
+
+  .presentation-mode .geometry-card,
+  .presentation-mode .map-radio-card,
+  .presentation-mode .coverage-card,
+  .presentation-mode .propagation-card {
+    padding: 0.65rem;
+  }
+
+  .presentation-mode .link-sidebar {
+    gap: 0.55rem;
+  }
+
+  .presentation-mode .terrain-panel {
+    padding: 0.65rem;
+  }
+
+  .presentation-mode .terrain-heading p {
+    display: none;
+  }
+
+  .presentation-mode .scenario-overview,
+  .presentation-mode .scenario-context {
+    margin-bottom: 0.55rem;
+  }
+
+  .presentation-mode .scenario-context {
+    display: none;
+  }
+
+  .presentation-mode .input-panel,
+  .presentation-mode .results-panel,
+  .presentation-mode .assessment-section {
+    padding: 0.72rem;
+  }
+
+  .presentation-mode .fields-grid {
+    gap: 0.55rem;
+    margin-top: 0.65rem;
+  }
+
+  .presentation-mode .hero-results {
+    gap: 0.5rem;
+    margin-top: 0.65rem;
+  }
+
+  .presentation-mode .result-card {
+    min-height: 88px;
+    padding: 0.65rem;
+  }
+
+  .presentation-mode .section-heading p {
+    display: none;
+  }
+
+  .presentation-mode .interpretation-note {
+    margin-top: 0.55rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 850px) {
+    .presentation-bar {
+      grid-template-columns: 1fr auto;
+      top: 6px;
+    }
+
+    .presentation-bar__anchors {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .presentation-brand strong {
+      display: none;
+    }
+
+    .presentation-brand {
+      padding-left: 0.25rem;
+    }
+
+    .presentation-route {
+      padding-inline: 0.55rem;
+    }
+
+    .presentation-mode .map-container {
+      min-height: 420px;
+    }
+  }
+</style>

@@ -6,6 +6,8 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import TechnicalTerm from '../common/TechnicalTerm';
+
 export type PlannerHelpKey =
   | 'gnb'
   | 'ue'
@@ -34,7 +36,12 @@ export type PlannerHelpKey =
   | 'beamwidth'
   | 'coverage'
   | 'coverageRadius'
-  | 'gridResolution';
+  | 'gridResolution'
+  | 'terrainProfile'
+  | 'dem'
+  | 'fresnel'
+  | 'fresnel60'
+  | 'terrainLos';
 
 type HelpDefinition = {
   title: string;
@@ -250,6 +257,41 @@ const help: Record<PlannerHelpKey, HelpDefinition> = {
     effect:
       'Una cuadrícula mayor produce más detalle, pero requiere más cálculos. Por eso el procesamiento se ejecuta en un Web Worker.',
   },
+  terrainProfile: {
+    title: 'Perfil de terreno',
+    what:
+      'Es una sección vertical del relieve entre la gNB y el UE.',
+    effect:
+      'Permite identificar si una elevación del terreno invade la línea directa o la zona de Fresnel.',
+  },
+  dem: {
+    title: 'Modelo digital de elevación (DEM)',
+    what:
+      'Es una cuadrícula geográfica que almacena la elevación del terreno.',
+    effect:
+      'El GLO-90 utilizado tiene resolución nominal de 90 m y no representa automáticamente edificios o vegetación.',
+  },
+  fresnel: {
+    title: 'Primera zona de Fresnel',
+    what:
+      'Es una región elipsoidal alrededor del trayecto directo en la que los obstáculos pueden influir en la propagación por difracción.',
+    effect:
+      'Su radio depende de la frecuencia y de las distancias desde el punto evaluado hasta ambos extremos del enlace.',
+  },
+  fresnel60: {
+    title: 'Despeje del 60% de F1',
+    what:
+      'Es una referencia de planificación que comprueba si el terreno permanece por debajo del 60% de la primera zona de Fresnel alrededor del trayecto directo.',
+    effect:
+      'ITU-R P.530 indica que, por encima de aproximadamente 2 GHz, un despeje de al menos 60% de F1 se asocia con condiciones cercanas al espacio libre respecto a difracción.',
+  },
+  terrainLos: {
+    title: 'Línea de vista respecto al terreno',
+    what:
+      'Comprueba únicamente si el relieve del DEM cruza la línea recta entre las alturas de las antenas.',
+    effect:
+      'Un resultado despejado no garantiza LOS real porque el DEM no contiene necesariamente edificios, árboles u otros obstáculos.',
+  },
 };
 
 export function PlannerHelp({
@@ -433,10 +475,19 @@ export function PlannerTerm({
   children: ReactNode;
   helpKey: PlannerHelpKey;
 }) {
+  const definition =
+    help[helpKey];
+
   return (
-    <span className="planner-term">
-      <span>{children}</span>
-      <PlannerHelp helpKey={helpKey} />
-    </span>
+    <TechnicalTerm
+      title={
+        definition.title
+      }
+      description={
+        definition.what
+      }
+    >
+      {children}
+    </TechnicalTerm>
   );
 }

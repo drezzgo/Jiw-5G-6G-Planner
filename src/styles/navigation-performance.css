@@ -1,0 +1,17 @@
+::view-transition-old(jiw-page),
+::view-transition-new(jiw-page) {
+  animation-duration: 140ms;
+}
+
+.maplibregl-map,
+canvas,
+svg {
+  view-transition-name: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(jiw-page),
+  ::view-transition-new(jiw-page) {
+    animation-duration: 1ms;
+  }
+}

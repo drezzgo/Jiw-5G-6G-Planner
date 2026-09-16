@@ -1,0 +1,119 @@
+---
+import PresentationBar from '../components/PresentationBar.astro';
+import ClientIslandFallback from '../components/ClientIslandFallback.astro';
+import NavigationEnhancer from '../components/NavigationEnhancer.astro';
+import Imt2030Lab from '../components/react/imt2030/Imt2030Lab';
+import '../styles/academic-ux-fixes.css';
+import { fade } from 'astro:transitions';
+import '../styles/jiw-colombia-theme.css';
+
+const pageTransition = fade({ duration: '140ms' });
+
+const anchors = [
+  {href: '#escenario', label: 'Escenario'},
+  {href: '#resultado', label: 'Resultado'},
+  {href: '#capacidades', label: 'Capacidades'},
+  {href: '#estado', label: 'Estado actual'},
+];
+---
+
+<!doctype html>
+<html lang="es" transition:animate="none">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width"
+    />
+    <meta
+      name="description"
+      content="Módulo experimental IMT-2030 de JIW 5G/6G Planner Colombia."
+    />
+    <title>
+      IMT-2030 experimental | JIW Planner Colombia
+    </title>
+    <NavigationEnhancer />
+  </head>
+
+  <body>
+    <main
+      class="page-shell"
+      transition:name="jiw-page"
+      transition:animate={pageTransition}
+    >
+      <PresentationBar
+        current="imt2030"
+        anchors={anchors}
+      />
+
+      <header class="page-header">
+        <p class="kicker">
+          IMT-2030 / 6G · modo experimental
+        </p>
+
+        <h1>
+          Qué podemos comprobar hoy
+        </h1>
+
+        <p>
+          En esta fase separamos las referencias publicadas
+          para IMT-2030 de lo que nuestro modelo realmente
+          puede calcular.
+        </p>
+      </header>
+
+      <Imt2030Lab client:only="react">
+        <ClientIslandFallback
+          slot="fallback"
+          variant="imt2030"
+          label="Cargando módulo IMT-2030…"
+        />
+      </Imt2030Lab>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    background: var(--jiw-canvas);
+    color: var(--jiw-ink);
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .page-shell {
+    width: min(1320px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 1.4rem 0 3rem;
+  }
+
+  .page-header {
+    margin-bottom: 0.9rem;
+    font-family: var(--jiw-font);
+  }
+
+  .page-header .kicker {
+    margin: 0;
+    color: var(--jiw-muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .page-header h1 {
+    margin: 0.18rem 0 0.3rem;
+    font-size: clamp(1.8rem, 5vw, 3.1rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .page-header > p:not(.kicker) {
+    max-width: 760px;
+    margin: 0;
+    color: var(--jiw-muted);
+    line-height: 1.5;
+  }
+</style>

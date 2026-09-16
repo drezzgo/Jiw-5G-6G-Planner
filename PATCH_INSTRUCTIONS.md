@@ -1,32 +1,30 @@
-# Patch 06B — Worker oficial de MapLibre para Vite
+# Patch 11E — UI monocromática + Colombia
 
-Este patch corrige el warning:
+Aplicar SOBRE 11D.
 
-```text
-maplibre-gl-worker.mjs ... optimize deps directory ... file does not exist
-```
+Este patch reemplaza la dirección visual de 11C por una interpretación mucho más
+cercana a la nueva referencia:
 
-siguiendo la integración documentada por MapLibre GL JS para Vite.
+- monocromática;
+- compacta;
+- tarjetas blancas;
+- fondo gris claro;
+- bordes hairline;
+- sombra sutil;
+- controles de 18 px;
+- tarjetas de 24 px;
+- acciones principales negras.
+
+La identidad Colombia se conserva únicamente como acento.
 
 ## Aplicar
 
-Primero detén `pnpm dev` con `Ctrl+C`.
-
 ```powershell
 Expand-Archive `
-  -Path "S:\Downloads\jiw-planner-phase06b-maplibre-worker-fix.zip" `
+  -Path "S:\Downloads\jiw-planner-phase11e-shadcn-colombia-ui-overlay.zip" `
   -DestinationPath "." `
   -Force
 ```
-
-Limpia únicamente la caché generada por Vite:
-
-```powershell
-Remove-Item -Recurse -Force .\node_modules\.vite -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force .\.astro -ErrorAction SilentlyContinue
-```
-
-No borres `node_modules` completo.
 
 ## Validar
 
@@ -36,19 +34,44 @@ pnpm build
 pnpm dev
 ```
 
-Después abre:
+## Revisar
 
 ```text
-http://localhost:4321/planner
+/
+ /calculadora
+ /planner
+ /imt2030
 ```
 
-Prueba:
+### Inicio
 
-- mapa base;
-- marcadores;
-- línea gNB → UE;
-- generar cobertura.
+- sin gradientes;
+- hero blanco;
+- botones negros/grises;
+- marca tricolor pequeña;
+- tarjetas blancas con sombra mínima.
 
-El warning de `maplibre-gl-worker.mjs` ya no debería aparecer.
+### Calculadora
 
-El warning de chunks > 500 kB es otro asunto y puede permanecer.
+- inputs gris claro;
+- acción principal negra;
+- resultados en tarjetas neutras;
+- sin chips amarillos grandes.
+
+### Planner
+
+- cards blancas;
+- controles monocromáticos;
+- gNB azul y UE rojo;
+- colores de cobertura permanecen semánticos.
+
+### IMT-2030
+
+- tarjetas neutras;
+- fórmula sobre gris suave;
+- marca Colombia pequeña;
+- azul solo en enlaces y referencias puntuales.
+
+### Navegación
+
+Se mantienen ClientRouter, prefetch y View Transitions de 11D.
