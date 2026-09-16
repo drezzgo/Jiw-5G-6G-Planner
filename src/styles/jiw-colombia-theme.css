@@ -1,0 +1,100 @@
+@import './navigation-performance.css';
+
+:root {
+  /* Neutral base taken from the new reference. */
+  --jiw-canvas: #f5f5f5;
+  --jiw-surface-raised: #ffffff;
+  --jiw-surface: #fafafa;
+  --jiw-surface-soft: #f5f5f5;
+
+  --jiw-ink: #0a0a0a;
+  --jiw-ink-soft: #171717;
+  --jiw-muted: #737373;
+  --jiw-border: #e5e5e5;
+  --jiw-border-strong: #d4d4d4;
+
+  /* Colombia appears as an accent, not as the whole interface. */
+  --jiw-blue: #003893;
+  --jiw-blue-soft: #eef3fb;
+  --jiw-yellow: #fcd116;
+  --jiw-yellow-soft: #fff8d0;
+  --jiw-red: #ce1126;
+  --jiw-red-soft: #fcecee;
+
+  /* Semantic states remain separate from brand decoration. */
+  --jiw-success: #16784d;
+  --jiw-success-soft: #edf7f1;
+  --jiw-warning: #8a5b00;
+  --jiw-warning-soft: #fff7e1;
+  --jiw-neutral: #737373;
+  --jiw-neutral-soft: #f5f5f5;
+
+  --jiw-primary: #171717;
+  --jiw-primary-hover: #0a0a0a;
+
+  --jiw-radius-card: 24px;
+  --jiw-radius-control: 18px;
+  --jiw-radius-small: 10px;
+
+  --jiw-shadow-card:
+    0 0 0 1px rgba(23, 23, 23, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 1px 2px -1px rgba(0, 0, 0, 0.08);
+
+  --jiw-font:
+    Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  background: var(--jiw-canvas);
+  color: var(--jiw-ink);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--jiw-canvas);
+  color: var(--jiw-ink);
+  font-family: var(--jiw-font);
+}
+
+::selection {
+  background: var(--jiw-yellow);
+  color: var(--jiw-ink);
+}
+
+a {
+  text-underline-offset: 0.18em;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--jiw-blue);
+  outline-offset: 2px;
+}
+
+/* Keep the map itself visually neutral. */
+.maplibregl-ctrl-group {
+  overflow: hidden;
+  border: 1px solid var(--jiw-border) !important;
+  border-radius: var(--jiw-radius-control) !important;
+  box-shadow: var(--jiw-shadow-card) !important;
+}
+
+.maplibregl-ctrl-group button {
+  background-color: var(--jiw-surface-raised) !important;
+}
+
+* {
+  scrollbar-color: var(--jiw-border-strong) transparent;
+}
