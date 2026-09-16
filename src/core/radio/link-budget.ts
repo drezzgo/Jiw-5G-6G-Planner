@@ -10,24 +10,22 @@ import { calculateThermalNoiseDbm } from './thermal-noise';
 import { calculateSnrDb } from './snr';
 import { calculateLinkMarginDb } from './link-margin';
 import { calculateShannonCapacityBps } from './shannon';
+import { assertFinite } from './validation';
 
 /**
- * Orchestrates the MVP radio link budget.
+ * Ejecuta el presupuesto de enlace usando una pérdida
+ * de trayecto ya calculada.
  *
- * Important:
- * - does not determine 5G compliance;
- * - does not select modulation/MCS;
- * - does not model interference;
- * - does not decide IMT-2030 alignment.
- *
- * It only returns mathematical radio results.
+ * Esto permite que FSPL, 3GPP UMi, UMa, InH u otros
+ * modelos alimenten exactamente el mismo Radio Engine.
  */
-export function calculateLinkBudget(
+export function calculateLinkBudgetFromPathLoss(
   input: LinkBudgetInput,
+  pathLossDb: number,
 ): LinkBudgetResult {
-  const pathLossDb = calculateFsplDb(
-    input.distanceM,
-    input.frequencyHz,
+  assertFinite(
+    pathLossDb,
+    'pathLossDb',
   );
 
   const eirpDbm = calculateEirpDbm(
@@ -36,18 +34,20 @@ export function calculateLinkBudget(
     input.txLossDb,
   );
 
-  const receivedPowerDbm = calculateReceivedPowerDbm(
-    eirpDbm,
-    pathLossDb,
-    input.rxGainDbi,
-    input.rxLossDb,
-  );
+  const receivedPowerDbm =
+    calculateReceivedPowerDbm(
+      eirpDbm,
+      pathLossDb,
+      input.rxGainDbi,
+      input.rxLossDb,
+    );
 
-  const noisePowerDbm = calculateThermalNoiseDbm(
-    input.temperatureK,
-    input.bandwidthHz,
-    input.noiseFigureDb,
-  );
+  const noisePowerDbm =
+    calculateThermalNoiseDbm(
+      input.temperatureK,
+      input.bandwidthHz,
+      input.noiseFigureDb,
+    );
 
   const snrDb = calculateSnrDb(
     receivedPowerDbm,
@@ -77,4 +77,22 @@ export function calculateLinkBudget(
     linkMarginDb,
     shannonCapacityBps,
   };
+}
+
+/**
+ * Mantiene el comportamiento original de las fases
+ * anteriores: FSPL como modelo de referencia ideal.
+ */
+export function calculateLinkBudget(
+  input: LinkBudgetInput,
+): LinkBudgetResult {
+  const pathLossDb = calculateFsplDb(
+    input.distanceM,
+    input.frequencyHz,
+  );
+
+  return calculateLinkBudgetFromPathLoss(
+    input,
+    pathLossDb,
+  );
 }
